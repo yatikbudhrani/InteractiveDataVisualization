@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Data Visualization</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-color: lightyellow;
+      }
+      .chart-container {
+        padding-top: 15rem;
+        max-width: 40rem;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <center>
+      <div class="chart-container">
+        <canvas id="myChart"></canvas>
+      </div>
+    </center>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+      const data = {
+        labels: ["Fruits", "Vegetables", "Carbohydrates", "Fats", "Protein"],
+        datasets: [
+          {
+            label: "Daily Calorie Consumption",
+            backgroundColor: "#BB86FC",
+            borderColor: "#6200EE",
+            borderWidth: 2,
+            data: [25, 35, 70, 85, 12],
+          },
+        ],
+      };
+
+      const config = {
+        type: "line",
+        data: data,
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: "Calorie vs Food Intake",
+            },
+          },
+        },
+      };
+
+      const ctx = document.getElementById("myChart").getContext("2d");
+      const myChart = new Chart(ctx, config);
+
+      myChart.options.plugins.tooltip = {
+        callbacks: {
+          label: function (context) {
+            return `Calories: ${context.parsed.y}`;
+          },
+        },
+      };
+
+      const chartAnimation = anime({
+        targets: myChart.data.datasets[0].data,
+        easing: "linear",
+        delay: anime.stagger(200),
+        duration: 1000,
+        loop: true,
+        direction: "alternate",
+        update: function (anim) {
+          myChart.update();
+        },
+      });
+    </script>
+  </body>
+</html>
